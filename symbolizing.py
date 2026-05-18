@@ -1,3 +1,4 @@
+# symbolizing.py
 # Format: (code, extra_bits, min_length, max_length)
 LENGTH_CODES = [
     (257, 0, 3, 3), (258, 0, 4, 4), (259, 0, 5, 5), (260, 0, 6, 6),
@@ -9,6 +10,7 @@ LENGTH_CODES = [
     (281, 5, 131, 162), (282, 5, 163, 194), (283, 5, 195, 226), (284, 5, 227, 257),
     (285, 0, 258, 258)
 ]
+
 # Format: (code, extra_bits, min_dist, max_dist)
 DISTANCE_CODES = [
     (0, 0, 1, 1), (1, 0, 2, 2), (2, 0, 3, 3), (3, 0, 4, 4),
@@ -48,8 +50,9 @@ def symbolize_deflate(lz77_tokens):
             deflate_symbols.append(("LIT", token[1]))
             
         elif token[0] == "Match":
-            distance = token[1]
-            length = token[2]
+            # Token format: ("Match", length, distance)
+            length = token[1]
+            distance = token[2]
             
             # Process Length
             len_code, len_ext_bits, len_ext_val = get_length_symbol(length)
@@ -58,7 +61,7 @@ def symbolize_deflate(lz77_tokens):
             # Process Distance
             dist_code, dist_ext_bits, dist_ext_val = get_distance_symbol(distance)
             deflate_symbols.append(("DIST", dist_code, dist_ext_bits, dist_ext_val))
-            
+    
     # Append End of Block (EOB) symbol
     deflate_symbols.append(("EOB", 256))
     

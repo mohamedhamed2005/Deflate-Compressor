@@ -51,7 +51,6 @@ def find_match(data, pos, hash_table):
     return None
 
 
-
 def make_literal(byte_value):
 
     return ("Literal", byte_value)
